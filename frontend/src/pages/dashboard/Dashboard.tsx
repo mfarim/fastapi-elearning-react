@@ -16,6 +16,18 @@ import {
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
+const formatDate = (dateStr?: string): string => {
+  if (!dateStr) return '-';
+  const d = new Date(dateStr);
+  return isNaN(d.getTime())
+    ? '-'
+    : d.toLocaleDateString('id-ID', {
+        day: 'numeric',
+        month: 'short',
+        year: 'numeric',
+      });
+};
+
 export const Dashboard: React.FC = () => {
   const { user } = useAuthStore();
   const isAdmin = user?.roles.includes('ROLE_ADMIN');
@@ -91,11 +103,7 @@ export const Dashboard: React.FC = () => {
                 <div className="flex items-center justify-between">
                   <h4 className="text-sm font-bold text-amber-900">{a.title}</h4>
                   <span className="text-[11px] text-amber-700/80 font-medium">
-                    {a.created_at || a.createdAt ? new Date(a.created_at || a.createdAt).toLocaleDateString('id-ID', {
-                      day: 'numeric',
-                      month: 'short',
-                      year: 'numeric',
-                    }) : '-'}
+                    {formatDate(a.created_at || a.createdAt)}
                   </span>
                 </div>
                 <p className="text-xs text-amber-800 mt-1 leading-relaxed">{a.content}</p>

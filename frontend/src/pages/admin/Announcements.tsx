@@ -3,6 +3,18 @@ import api from '../../api/client';
 import type { Announcement, ApiResponse } from '../../types';
 import { Plus, Trash2, Edit2, Bell, X } from 'lucide-react';
 
+const formatDate = (dateStr?: string): string => {
+  if (!dateStr) return '-';
+  const d = new Date(dateStr);
+  return isNaN(d.getTime())
+    ? '-'
+    : d.toLocaleDateString('id-ID', {
+        day: 'numeric',
+        month: 'short',
+        year: 'numeric',
+      });
+};
+
 export const Announcements: React.FC = () => {
   const [announcements, setAnnouncements] = useState<Announcement[]>([]);
   const [loading, setLoading] = useState(true);
@@ -134,11 +146,7 @@ export const Announcements: React.FC = () => {
                       </span>
                     </td>
                     <td className="px-6 py-4 text-slate-500 text-xs">
-                      {a.created_at || a.createdAt ? new Date(a.created_at || a.createdAt).toLocaleDateString('id-ID', {
-                        day: 'numeric',
-                        month: 'short',
-                        year: 'numeric',
-                      }) : '-'}
+                      {formatDate(a.created_at || a.createdAt)}
                     </td>
                     <td className="px-6 py-4 text-right space-x-2">
                       <button
