@@ -1,5 +1,6 @@
 name: Frontend CI
 
+# Triggers automatically on push/PR modifying frontend files, or manual trigger via workflow_dispatch
 on:
   workflow_dispatch:
   push:

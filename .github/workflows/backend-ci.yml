@@ -1,5 +1,6 @@
 name: Backend CI
 
+# Triggers automatically on push/PR modifying backend files, or manual trigger via workflow_dispatch
 on:
   workflow_dispatch:
   push:

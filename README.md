@@ -1,5 +1,7 @@
 # 📚 Python FastAPI & React E-Learning LMS & CBT Platform
 
+[![Backend CI](https://github.com/mfarim/fastapi-elearning-react/actions/workflows/backend-ci.yml/badge.svg)](https://github.com/mfarim/fastapi-elearning-react/actions/workflows/backend-ci.yml)
+[![Frontend CI](https://github.com/mfarim/fastapi-elearning-react/actions/workflows/frontend-ci.yml/badge.svg)](https://github.com/mfarim/fastapi-elearning-react/actions/workflows/frontend-ci.yml)
 [![Python 3.12](https://img.shields.io/badge/Python-3.12+-3776AB?style=flat-square&logo=python&logoColor=white)](https://python.org)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.111+-009688?style=flat-square&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com)
 [![SQLAlchemy 2.0](https://img.shields.io/badge/SQLAlchemy-2.0_Async-D71F00?style=flat-square&logo=sqlalchemy&logoColor=white)](https://www.sqlalchemy.org)
