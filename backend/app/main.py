@@ -5,8 +5,11 @@ from fastapi.responses import JSONResponse
 from fastapi.exceptions import RequestValidationError
 
 from app.core.config import settings
+from app.core.database import AsyncSessionLocal
 from app.api.v1.api import api_router
 from app.api.v1.websocket import router as ws_router
+from sqlalchemy import text
+import redis.asyncio as aioredis
 
 app = FastAPI(
     title=settings.APP_NAME,
@@ -71,15 +74,43 @@ async def general_exception_handler(request: Request, exc: Exception):
     )
 
 
-# Health check
+# Health check with active PostgreSQL & Redis ping
 @app.get("/health", tags=["Health"])
 async def health_check():
-    return {
-        "status": "healthy",
+    db_status = "connected"
+    redis_status = "connected"
+    is_healthy = True
+
+    # 1. Active PostgreSQL Ping
+    try:
+        async with AsyncSessionLocal() as session:
+            await session.execute(text("SELECT 1"))
+    except Exception as e:
+        db_status = f"unhealthy: {str(e)}"
+        is_healthy = False
+
+    # 2. Active Redis Ping
+    try:
+        r = aioredis.from_url(settings.REDIS_URL, socket_connect_timeout=2)
+        await r.ping()
+        await r.aclose()
+    except Exception as e:
+        redis_status = f"unhealthy: {str(e)}"
+
+    overall_status = "healthy" if is_healthy and redis_status == "connected" else ("degraded" if is_healthy else "unhealthy")
+
+    payload = {
+        "status": overall_status,
+        "database": db_status,
+        "redis": redis_status,
         "app": settings.APP_NAME,
         "env": settings.APP_ENV,
         "timestamp": datetime.utcnow().isoformat(),
     }
+
+    if not is_healthy:
+        return JSONResponse(status_code=status.HTTP_503_SERVICE_UNAVAILABLE, content=payload)
+    return payload
 
 
 # Include Routers
