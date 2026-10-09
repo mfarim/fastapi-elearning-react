@@ -10,7 +10,7 @@ class ExcelService:
         sheet = wb.active
 
         students = []
-        # Header is usually row 1: [Nama, Email, NIS, NISN, Gender (L/P), Telepon, Alamat]
+        # Expected header row 1: [Name, Email, Student ID, NISN, Gender (M/F), Phone, Address]
         for row_idx, row in enumerate(sheet.iter_rows(values_only=True), start=1):
             if row_idx == 1:
                 continue  # skip header
